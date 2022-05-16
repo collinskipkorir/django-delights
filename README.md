@@ -29,4 +29,19 @@ Users should be able to:
 -   Command Line
 
 ## Screenshots
-...
+![1](images/1.png)
+<br> 
+![2](images/2.png)
+<br> 
+![3](images/3.png)
+<br> 
+![4](images/4.png)
+
+## Setup
+- Create an intial user named admin 
+`python manage.py createsuperuser`
+
+- Run the server
+`python manage.py runserver`
+
+Navigate to http://127.0.0.1:8000/ in the browser to see the server running.
