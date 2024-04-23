@@ -90,19 +90,23 @@ class ReportView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["purchases"] = Purchase.objects.all()
-        revenue = Purchase.objects.aggregate(
-            revenue=Sum("menu_item__price"))["revenue"]
+        
+        # Calculate revenue
+        revenue_aggregate = Purchase.objects.aggregate(revenue=Sum("menu_item__price"))
+        revenue = revenue_aggregate["revenue"] if revenue_aggregate["revenue"] is not None else 0
+        
+        # Calculate total cost
         total_cost = 0
         for purchase in Purchase.objects.all():
             for recipe_requirement in purchase.menu_item.reciperequirement_set.all():
-                total_cost += recipe_requirement.ingredient.unit_price * \
-                    recipe_requirement.quantity
+                total_cost += recipe_requirement.ingredient.unit_price * recipe_requirement.quantity
 
         context["revenue"] = revenue
         context["total_cost"] = total_cost
         context["profit"] = revenue - total_cost
 
         return context
+
 
 
 def log_out(request):
